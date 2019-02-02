@@ -1,0 +1,5 @@
+
+liquibase:
+  target: ./data/out.xml
+  output: ./data/newfile.xml
+  changesetId: 
