@@ -3,3 +3,21 @@ liquibase:
   target: ./data/out.xml
   output: ./data/newfile.xml
   changesetId: 
+  
+jpaentity:
+  selector:
+    lowercase: true
+    include:
+    - tr_.*
+    - ts_.*
+    exclude:
+    - ts_svc_cust_m_aud
+  database:
+    jdbcDriver: org.h2.Driver
+    url: jdbc:h2:file:~/h2db/smp/smp;DB_CLOSE_DELAY=-1
+    username: smp
+    password:
+  entity:
+    prefix: Super
+    writepath: ../smp/src/main/java/onlyone/smp/persistent/domain/rdbms/mapsuper
+    pakage: onlyone.smp.persistent.domain.rdbms.mapsuer
