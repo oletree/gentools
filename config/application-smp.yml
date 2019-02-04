@@ -19,5 +19,15 @@ jpaentity:
     password:
   entity:
     prefix: Super
-    writepath: ../smp/src/main/java/onlyone/smp/persistent/domain/rdbms/mapsuper
-    pakage: onlyone.smp.persistent.domain.rdbms.mapsuer
+    writepath: ./data/out
+    pakage: onlyone.smp.persistent.domain.rdbms
+  changetype:
+    typechange:
+    -
+      before: TIMESTAMP
+      after: java.time.LocalDateTime
+    enumchange:
+    -
+      before: BROK_STS_CD
+      after: onlyone.smp.persistent.domain.enums.EBrokSts
+    

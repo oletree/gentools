@@ -10,6 +10,7 @@ public class JpaEntityGenProperties {
 	private final Selector selector = new Selector();
 	private final Database database = new Database();
 	private final Entity entity = new Entity();
+	private final ListData changetype = new ListData();
 
 	
 	public Selector getSelector() {
@@ -22,6 +23,11 @@ public class JpaEntityGenProperties {
 	
 	public Entity getEntity() {
 		return entity;
+	}
+
+
+	public ListData getChangetype() {
+		return changetype;
 	}
 
 
@@ -109,6 +115,40 @@ public class JpaEntityGenProperties {
 		}
 		public void setLowercase(boolean lowercase) {
 			this.lowercase = lowercase;
+		}
+		
+	}
+	public static class ListData {
+		private List<ConvertData> typechange;
+		private List<ConvertData> enumchange;
+		public List<ConvertData> getTypechange() {
+			return typechange;
+		}
+		public void setTypechange(List<ConvertData> typechange) {
+			this.typechange = typechange;
+		}
+		public List<ConvertData> getEnumchange() {
+			return enumchange;
+		}
+		public void setEnumchange(List<ConvertData> enumchange) {
+			this.enumchange = enumchange;
+		}
+		
+	}
+	public static class ConvertData{
+		private String before;
+		private String after;
+		public String getBefore() {
+			return before;
+		}
+		public void setBefore(String before) {
+			this.before = before;
+		}
+		public String getAfter() {
+			return after;
+		}
+		public void setAfter(String after) {
+			this.after = after;
 		}
 		
 	}

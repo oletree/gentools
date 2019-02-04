@@ -25,6 +25,7 @@ import gentools.jpa.core.GenEntityClass;
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenConstants;
 import gentools.jpa.core.config.JpaEntityGenProperties;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
 import gentools.jpa.core.gen.DefaultClassMap;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
@@ -49,6 +50,12 @@ public class JpaEntityGen implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		for( ConvertData t: jpaEntityGenProperties.getChangetype().getTypechange()) {
+			DefaultClassMap.addCustMap(t.getBefore(), t.getAfter());
+		}
+		for( ConvertData t: jpaEntityGenProperties.getChangetype().getEnumchange()) {
+			DefaultClassMap.addEnumMap(t.getBefore(), t.getAfter());
+		}
 		Class.forName(jpaEntityGenProperties.getDatabase().getJdbcDriver());
 		Connection conn = DriverManager.getConnection(jpaEntityGenProperties.getDatabase().getUrl(),
 				jpaEntityGenProperties.getDatabase().getUsername(), jpaEntityGenProperties.getDatabase().getPassword());
@@ -74,7 +81,6 @@ public class JpaEntityGen implements CommandLineRunner {
 			TreeMap<String, String> colJavaType = getColType(conn, tableName);
 			table.setColumns(getTableColums(md, tableName, pk, colJavaType));
 			if(pk.size() > 1) table.setMultiPk(true);
-			break;
 		}
 		genEntityClass.write(list);
 		conn.close();
@@ -88,7 +94,7 @@ public class JpaEntityGen implements CommandLineRunner {
 	      int colcnt = metadata.getColumnCount();
 	      for (int i = 1; i <= colcnt; i++) {
 	    	  treeMap.put(metadata.getColumnName(i),
-	    			  DefaultClassMap.getJavaClass(metadata.getColumnClassName(i)) );
+	    			  DefaultClassMap.getJavaClass(metadata.getColumnClassName(i)));
 			}
 		return treeMap;
 	}
@@ -116,7 +122,10 @@ public class JpaEntityGen implements CommandLineRunner {
 			col.setRemarks(rs.getString(JpaEntityGenConstants.META_REMARKS));
 			col.setIsNullAble(rs.getString(JpaEntityGenConstants.COLUMN_META_IS_NULLABLE));
 			col.setIsAutoIncrement(rs.getString(JpaEntityGenConstants.COLUMN_META_IS_AUTOINCREMENT));
-			col.setJavaClassName(colJavaType.get(col.getColumnName()));
+			String javaClassName = DefaultClassMap.getColumnJavaCalss(
+					colJavaType.get(col.getColumnName()), col.getTypeName(), col.getColumnName()
+					);
+			col.setJavaClassName(javaClassName);
 			if( pk.contains(col.getColumnName()) ) {
 				col.setPkColumn(true);
 			}

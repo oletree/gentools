@@ -37,7 +37,7 @@ public class HandlerUtil {
 	
 	public static String columnToFieldName(String column) {
 		String fieldName = column.toLowerCase().replaceAll("_", " ");
-		return capitailizeWord(fieldName, true);
+		return capitailizeWord(fieldName, true).replaceAll(" ", "");
 	}
 	
 	public static boolean isSameColumnName(String field, String column) {
