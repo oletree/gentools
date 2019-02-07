@@ -39,9 +39,7 @@ public class FieldBody {
 				sb.append("\t").append("@Id").append("\n");
 			}
 		}
-		if(hasColumnAnno) {
-			sb.append("\t").append("@Column(name=\"").append(column.getColumnName()).append("\")").append("\n");
-		}
+		addColumnAnnotation(sb);
 		if(autoInc) {
 			sb.append("\t").append("@GeneratedValue(strategy = GenerationType.IDENTITY)").append("\n");
 		}
@@ -50,6 +48,58 @@ public class FieldBody {
 		return sb.toString();
 	}
 	
+	private void addColumnAnnotation(StringBuilder sb) {
+		boolean addLength = false;
+		boolean addColumnDefinition= false;
+		boolean addUnique = false;
+		boolean addNullable = false;
+		if(multiKey) return;
+		int length = column.getColumnSize();
+		if(column.getJavaClassName().equals("java.lang.String")) {
+			addLength = true;
+		}
+		if("char".equals(column.getTypeName().toLowerCase()) ) {
+			addColumnDefinition = true;
+		}
+		if("no".equals(column.getIsNullAble().toLowerCase())) {
+			addNullable = true;
+		}
+		if(column.isPkColumn()) {
+			addUnique = true;
+		}
+		boolean hasfirst = false;
+		if(hasColumnAnno ||addLength || addColumnDefinition || addUnique || addNullable) {
+			sb.append("\t@Column(");
+			if(hasColumnAnno) {
+				sb.append("name=\"").append(column.getColumnName()).append("\"");
+				hasfirst = true;
+			}
+			if(addUnique) {
+				if(hasfirst)sb.append(", ");
+				sb.append("unique=true");
+				hasfirst = true;
+			}
+			if(addNullable) {
+				if(hasfirst)sb.append(", ");
+				sb.append("nullable=false");
+				hasfirst = true;
+			}
+			if(addLength) {
+				if(hasfirst)sb.append(", ");
+				sb.append("length=").append(Integer.toString(length));
+				hasfirst = true;
+				
+			}
+			if(addColumnDefinition) {
+				if(hasfirst)sb.append(", ");
+				sb.append("columnDefinition=\"char(").append(Integer.toString(length)).append(")\"");
+				hasfirst = true;				
+			}
+			sb.append(")").append("\n");
+		}
+
+		
+	}
 	public String toStringMethod() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\t").append("public ").append(fieldType).append(" ")

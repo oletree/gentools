@@ -33,15 +33,17 @@ public class PkClazzBody {
 		StringBuilder sb = new StringBuilder();
 		sb.append(clazzImport.toString()).append("\n");
 		sb.append("/**").append("\n");
-		sb.append(" * Pk for ").append(tableName).append("\n");
+		sb.append(" * The primary key class for the ").append(tableName).append(" database table.").append("\n");
 		sb.append(" *").append("\n");
 		sb.append(" */").append("\n");
 		sb.append("@Embeddable").append("\n");
 		sb.append("public class ").append(className).append(" implements Serializable {").append("\n");
+		sb.append("\t").append("//default serial version id, required for serializable classes.").append("\n");
 		sb.append("\tprivate static final long serialVersionUID = 1L;").append("\n\n");
 		for(FieldBody f : fieldList) {
 			sb.append(f.toString());
 		}
+		sb.append("\t").append("public ").append(className).append("()").append(" {").append("\n").append("\t").append("}").append("\n\n");
 		for(FieldBody f : fieldList) {
 			sb.append(f.toStringMethod());
 		}
@@ -57,15 +59,16 @@ public class PkClazzBody {
 		sb.append("\t\t").append("return").append("\n");
 		boolean isfirst = true;
 		for(FieldBody f : fieldList) {
-			sb.append("\t\t\t");
+			
 			if(isfirst) {
+				sb.append("\t\t\t");
 				isfirst = false;
 			}else {
-				sb.append("&& ");
+				sb.append("\n").append("\t\t\t").append("&& ");
 			}
-			sb.append("this.").append(f.fieldName).append(".equals(castOther.").append(f.fieldName).append(")").append("\n");
+			sb.append("this.").append(f.fieldName).append(".equals(castOther.").append(f.fieldName).append(")");
 		}
-		sb.append("\t}").append("\n\n");
+		sb.append(";").append("\n").append("\t}").append("\n\n");
 		
 		sb.append("\t").append("public int hashCode() {").append("\n");
 		sb.append("\t\t").append("final int prime = 31;").append("\n");

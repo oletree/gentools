@@ -44,6 +44,7 @@ public class ClazzBody {
 		for(FieldBody f : fieldList) {
 			sb.append(f.toString());
 		}
+		sb.append("\t").append("public ").append(className).append("()").append(" {").append("\n").append("\t").append("}").append("\n\n");
 		for(FieldBody f : fieldList) {
 			sb.append(f.toStringMethod());
 		}
