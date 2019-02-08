@@ -2,6 +2,8 @@ package gentools.jpa.core;
 
 import java.util.List;
 
+import org.h2.util.StringUtils;
+
 import gentools.jpa.core.config.JpaEntityGenProperties;
 
 public class HandlerUtil {
@@ -37,7 +39,13 @@ public class HandlerUtil {
 	
 	public static String columnToFieldName(String column) {
 		String fieldName = column.toLowerCase().replaceAll("_", " ");
-		return capitailizeWord(fieldName, true).replaceAll(" ", "");
+		String newFieldName = capitailizeWord(fieldName, true).replaceAll(" ", "");
+		String firstLetter = newFieldName.substring(0, 1);
+		if( StringUtils.isNumber(firstLetter) ) {
+			return "_" + newFieldName.substring(1, newFieldName.length());
+		}
+		
+		return newFieldName;
 	}
 	
 	public static boolean isSameColumnName(String field, String column) {
@@ -81,5 +89,19 @@ public class HandlerUtil {
 					suffix.subSequence(1, suffix.length()));
 		}
 		return String.format("%s%s", prefix, suffix);
+	}
+	
+	public static void addClassComment(StringBuilder sb, String... comments) {
+		addComment(sb, "", comments);
+	}
+	public static void addMemberComment(StringBuilder sb, String... comments) {
+		addComment(sb, "\t", comments);
+	}
+	public static void addComment(StringBuilder sb,String prefix,  String... comments) {
+		sb.append(prefix).append("/**").append("\n");
+		for(String value : comments) {			
+			sb.append(prefix).append(String.format(" * %s", value)).append("\n");
+		}
+		sb.append(prefix).append(" */").append("\n");
 	}
 }

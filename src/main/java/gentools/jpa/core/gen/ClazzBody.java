@@ -3,6 +3,7 @@ package gentools.jpa.core.gen;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.info.DbTable;
 
 public class ClazzBody {
@@ -33,10 +34,7 @@ public class ClazzBody {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(clazzImport.toString()).append("\n");
-		sb.append("/**").append("\n");
-		sb.append(" * ").append(tableInfo.getRemarks()).append("\n");
-		sb.append(" *").append("\n");
-		sb.append(" */").append("\n");
+		HandlerUtil.addClassComment(sb, tableInfo.getRemarks());
 		sb.append("@Entity").append("\n");
 		sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append("\n");
 		sb.append("public class ").append(className).append(" implements Serializable {").append("\n");

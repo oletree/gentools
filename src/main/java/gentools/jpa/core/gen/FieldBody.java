@@ -1,5 +1,9 @@
 package gentools.jpa.core.gen;
 
+
+
+import org.springframework.util.StringUtils;
+
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
@@ -32,6 +36,7 @@ public class FieldBody {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
+		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
 		if(idColumn) {
 			if(multiKey) {
 				sb.append("\t").append("@EmbeddedId").append("\n");
@@ -102,16 +107,18 @@ public class FieldBody {
 	}
 	public String toStringMethod() {
 		StringBuilder sb = new StringBuilder();
+		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
 		sb.append("\t").append("public ").append(fieldType).append(" ")
 		.append(HandlerUtil.buildAccessorName("get", fieldName)).append("() {").append("\n");
 		sb.append("\t\t").append("return this.").append(fieldName).append(";").append("\n");
 		sb.append("\t").append("}").append("\n\n");
+		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
 		sb.append("\t").append("public ").append("void").append(" ")
 		.append(HandlerUtil.buildAccessorName("set", fieldName)).append("(")
 		.append(fieldType).append(" ").append(fieldName).append(") {").append("\n");
 		sb.append("\t\t").append("this.").append(fieldName)
 		.append(" = ").append(fieldName).append(";").append("\n");
-		sb.append("\t").append("}").append("\n");
+		sb.append("\t").append("}").append("\n\n");
 		return sb.toString();
 	}
 	

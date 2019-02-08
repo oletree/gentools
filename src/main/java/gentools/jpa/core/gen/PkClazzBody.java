@@ -3,6 +3,7 @@ package gentools.jpa.core.gen;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.info.DbTable;
 
 public class PkClazzBody {
@@ -32,10 +33,7 @@ public class PkClazzBody {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(clazzImport.toString()).append("\n");
-		sb.append("/**").append("\n");
-		sb.append(" * The primary key class for the ").append(tableName).append(" database table.").append("\n");
-		sb.append(" *").append("\n");
-		sb.append(" */").append("\n");
+		HandlerUtil.addClassComment(sb, "The primary key class for the " + tableName + " database table.");
 		sb.append("@Embeddable").append("\n");
 		sb.append("public class ").append(className).append(" implements Serializable {").append("\n");
 		sb.append("\t").append("//default serial version id, required for serializable classes.").append("\n");
