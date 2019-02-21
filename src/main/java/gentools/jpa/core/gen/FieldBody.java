@@ -30,7 +30,7 @@ public class FieldBody {
 		fieldName = HandlerUtil.columnToFieldName(column.getColumnName());
 		hasColumnAnno = !HandlerUtil.isSameColumnName(fieldName, column.getColumnName());
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
-		autoInc = "true".equals(column.getIsAutoIncrement() );
+		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
 	}
 	
 	public String toString() {
