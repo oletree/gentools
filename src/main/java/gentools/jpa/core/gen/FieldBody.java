@@ -1,7 +1,6 @@
 package gentools.jpa.core.gen;
 
 
-
 import org.springframework.util.StringUtils;
 
 import gentools.jpa.core.HandlerUtil;
@@ -31,6 +30,7 @@ public class FieldBody {
 		hasColumnAnno = !HandlerUtil.isSameColumnName(fieldName, column.getColumnName());
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
+		isEnum = DefaultClassMap.getEnumJavaClass(column.getColumnName());
 	}
 	
 	public String toString() {
@@ -45,8 +45,12 @@ public class FieldBody {
 			}
 		}
 		addColumnAnnotation(sb);
+		
 		if(autoInc) {
 			sb.append("\t").append("@GeneratedValue(strategy = GenerationType.IDENTITY)").append("\n");
+		}
+		if(isEnum) {
+			sb.append("\t").append("@Enumerated(EnumType.STRING)").append("\n");
 		}
 		sb.append("\t").append("private ").append(fieldType).append(" ").append(fieldName).append(";").append("\n");
 		sb.append("\n");

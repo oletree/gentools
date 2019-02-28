@@ -17,8 +17,8 @@ public class DefaultClassMap {
 		noImportSet.add("java.lang.Long");
 	}
 	
-	public static String getEnumJavaClass(String columnName) {
-		return enumMap.get(columnName);
+	public static boolean getEnumJavaClass(String columnName) {
+		return enumMap.containsKey(columnName.toLowerCase());
 	}
 	public static String getColumnJavaCalss(String clazzName, String dbType, String columnName) {
 		if(enumMap.containsKey(columnName.toLowerCase()) ){
