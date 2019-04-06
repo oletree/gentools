@@ -24,7 +24,9 @@ public class ClazzImport {
 				if(onlyPk) {
 					if(c.isPkColumn()) importOut.add(c.getJavaClassName());
 				}else {
-					importOut.add(c.getJavaClassName());
+					if( !table.isMultiPk() || !c.isPkColumn()) {
+						importOut.add(c.getJavaClassName());						
+					}
 				}
 			}
 		}
