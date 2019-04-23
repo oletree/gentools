@@ -36,6 +36,7 @@ public class GenEntityClass {
 					out.flush();
 					out.close();
 				}
+				//여기서 Super를 사용하는 클래스 제작 하도록 수정
 				File file = new File(path, t.getClassName() + ".java");
 				PrintStream out = new PrintStream( new FileOutputStream(file), true, "UTF-8");
 				ClazzBody clazBody = new ClazzBody(t, prop.getEntity().getEntPackage(), pk);
