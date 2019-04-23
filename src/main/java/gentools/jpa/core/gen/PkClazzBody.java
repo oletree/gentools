@@ -10,13 +10,16 @@ public class PkClazzBody {
 
 	String className;
 	String tableName;
+	String pkgName;
 	private ClazzImport clazzImport;
 	private List<FieldBody> fieldList;
 	
 	public String getClassName() {
 		return className;
 	}
+	
 	public PkClazzBody(DbTable table, String pkg){
+		pkgName = pkg;
 		tableName = table.getTableName();
 		className = table.getClassName() + "PK";
 		clazzImport = new ClazzImport(table, pkg, true);
@@ -28,6 +31,10 @@ public class PkClazzBody {
 					return f;
 				})
 				.collect(Collectors.toList());
+	}
+	
+	public String getImportClass() {
+		return pkgName + "." + className;
 	}
 	
 	public String toString() {

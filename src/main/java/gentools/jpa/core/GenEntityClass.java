@@ -27,9 +27,9 @@ public class GenEntityClass {
 		if(path.exists() && path.isDirectory()) {
 			for(DbTable t : list) {
 				
-				
+				PkClazzBody pk = null;
 				if(t.isMultiPk()) {
-					PkClazzBody pk = new PkClazzBody(t, prop.getEntity().getPakage());
+					pk = new PkClazzBody(t, prop.getEntity().getKeyPackage());
 					File file = new File(path, pk.getClassName() + ".java");
 					PrintStream out = new PrintStream(new FileOutputStream(file), true, "UTF-8");
 					out.print(pk.toString());
@@ -38,7 +38,7 @@ public class GenEntityClass {
 				}
 				File file = new File(path, t.getClassName() + ".java");
 				PrintStream out = new PrintStream( new FileOutputStream(file), true, "UTF-8");
-				ClazzBody clazBody = new ClazzBody(t, prop.getEntity().getPakage());
+				ClazzBody clazBody = new ClazzBody(t, prop.getEntity().getEntPackage(), pk);
 				out.print(clazBody.toString());
 				out.flush();
 				out.close();

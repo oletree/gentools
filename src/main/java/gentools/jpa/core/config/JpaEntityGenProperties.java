@@ -32,9 +32,14 @@ public class JpaEntityGenProperties {
 
 
 	public static class Entity{
+		
+		private boolean hasSuper;
 		private String prefix;
 		private String writepath;
-		private String pakage;
+		private String entPackage;
+		private String keyPackage;
+		private String superPackage;
+		
 		public String getPrefix() {
 			return prefix;
 		}
@@ -47,11 +52,29 @@ public class JpaEntityGenProperties {
 		public void setWritepath(String writepath) {
 			this.writepath = writepath;
 		}
-		public String getPakage() {
-			return pakage;
+		public String getEntPackage() {
+			return entPackage;
 		}
-		public void setPakage(String pakage) {
-			this.pakage = pakage;
+		public void setEntPackage(String entPackage) {
+			this.entPackage = entPackage;
+		}
+		public String getKeyPackage() {
+			return keyPackage;
+		}
+		public void setKeyPackage(String keyPackage) {
+			this.keyPackage = keyPackage;
+		}
+		public boolean isHasSuper() {
+			return hasSuper;
+		}
+		public void setHasSuper(boolean hasSuper) {
+			this.hasSuper = hasSuper;
+		}
+		public String getSuperPackage() {
+			return superPackage;
+		}
+		public void setSuperPackage(String superPackage) {
+			this.superPackage = superPackage;
 		}
 		
 	}

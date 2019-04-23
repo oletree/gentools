@@ -12,10 +12,10 @@ public class ClazzBody {
 	private ClazzImport clazzImport;
 	private List<FieldBody> fieldList;
 	
-	public ClazzBody(DbTable t,String pkg) {
+	public ClazzBody(DbTable t,String pkg, PkClazzBody pk) {
 		className = t.getClassName();
 		tableInfo = t;
-		clazzImport = new ClazzImport(t, pkg);
+		clazzImport = new ClazzImport(t, pkg, pk);
 		boolean addAll = !t.isMultiPk();
 		fieldList = t.getColumns().stream()
 				.filter(c->{ return addAll || !c.isPkColumn() ;})

@@ -18,9 +18,12 @@ jpaentity:
     username: smp
     password:
   entity:
+    hasSuper: true
     prefix: Super
     writepath: ./data/out
-    pakage: onlyone.smp.persistent.domain.rdbms
+    entPackage: onlyone.smp.persistent.domain.rdbms
+    keyPackage: onlyone.smp.persistent.domain.keys
+    superPackage: onlyone.smp.persistent.domain.mapsuper
   changetype:
     typechange:
     -
