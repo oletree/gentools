@@ -37,6 +37,7 @@ public class JpaEntityGenProperties {
 		private String writepath;
 		private String basepackage;
 		private String keypackage;
+		private String entpackage;
 		private ExtendEntity extendinfo;
 		
 		public boolean isSuperclass() {
@@ -68,6 +69,12 @@ public class JpaEntityGenProperties {
 		}
 		public void setKeypackage(String keypackage) {
 			this.keypackage = keypackage;
+		}
+		public String getEntpackage() {
+			return entpackage;
+		}
+		public void setEntpackage(String entpackage) {
+			this.entpackage = entpackage;
 		}
 		public ExtendEntity getExtendinfo() {
 			return extendinfo;

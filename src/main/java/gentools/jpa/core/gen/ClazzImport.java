@@ -9,7 +9,7 @@ import liquibase.util.StringUtils;
 
 public class ClazzImport extends AbstractExtendProc {
 	private boolean pkClass = false;
-	private String[] defaultImport = { "java.io.Serializable", "javax.persistence.*" };
+	protected static String[] defaultImport = { "java.io.Serializable", "javax.persistence.*" };
 	private String pakcageOut;
 	private TreeSet<String> importOut = new TreeSet<>();
 	private DbTable tableInfo;
