@@ -3,6 +3,7 @@ package gentools.jpa.core;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,30 +23,29 @@ public class GenEntityClass {
 	JpaEntityGenProperties prop;
 	
 	public void write(List<DbTable> list) throws Exception {
+		File basePath = Paths.get(prop.getEntity().getWritepath(), prop.getEntity().getBasepackage().replace(".", "/")).toFile(); 
+		File keyPath = Paths.get(prop.getEntity().getWritepath(), prop.getEntity().getKeypackage().replace(".", "/")).toFile();
+
 		
-		File path = new File(prop.getEntity().getWritepath());
-		if(path.exists() && path.isDirectory()) {
+		if(basePath.exists() && basePath.isDirectory() && keyPath.exists() && keyPath.isDirectory() ) {
 			for(DbTable t : list) {
-				
-				PkClazzBody pk = null;
 				if(t.isMultiPk()) {
-					pk = new PkClazzBody(t, prop.getEntity().getKeyPackage());
-					File file = new File(path, pk.getClassName() + ".java");
+					PkClazzBody pk = new PkClazzBody(t, prop.getEntity().getKeypackage());
+					File file = new File(keyPath, pk.getClassName() + ".java");
 					PrintStream out = new PrintStream(new FileOutputStream(file), true, "UTF-8");
 					out.print(pk.toString());
 					out.flush();
 					out.close();
 				}
-				//여기서 Super를 사용하는 클래스 제작 하도록 수정
-				File file = new File(path, t.getClassName() + ".java");
+				ClazzBody clazBody = new ClazzBody(t, prop);
+				File file = new File(basePath, clazBody.getClassName() + ".java");
 				PrintStream out = new PrintStream( new FileOutputStream(file), true, "UTF-8");
-				ClazzBody clazBody = new ClazzBody(t, prop.getEntity().getEntPackage(), pk);
 				out.print(clazBody.toString());
 				out.flush();
 				out.close();
 			}
 		}else {
-			logger.error("is not Exist or not Directory {}", path.getAbsolutePath() );
+			logger.error("is not Exist or not Directory {} , {}", basePath.getAbsolutePath() , keyPath.getAbsolutePath() );
 		}
 	}
 	

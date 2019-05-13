@@ -32,14 +32,19 @@ public class JpaEntityGenProperties {
 
 
 	public static class Entity{
-		
-		private boolean hasSuper;
-		private String prefix;
+		private boolean superclass = false;
+		private String prefix = "";
 		private String writepath;
-		private String entPackage;
-		private String keyPackage;
-		private String superPackage;
+		private String basepackage;
+		private String keypackage;
+		private ExtendEntity extendinfo;
 		
+		public boolean isSuperclass() {
+			return superclass;
+		}
+		public void setSuperclass(boolean superclass) {
+			this.superclass = superclass;
+		}
 		public String getPrefix() {
 			return prefix;
 		}
@@ -52,30 +57,25 @@ public class JpaEntityGenProperties {
 		public void setWritepath(String writepath) {
 			this.writepath = writepath;
 		}
-		public String getEntPackage() {
-			return entPackage;
+		public String getBasepackage() {
+			return basepackage;
 		}
-		public void setEntPackage(String entPackage) {
-			this.entPackage = entPackage;
+		public void setBasepackage(String pakage) {
+			this.basepackage = pakage;
 		}
-		public String getKeyPackage() {
-			return keyPackage;
+		public String getKeypackage() {
+			return keypackage;
 		}
-		public void setKeyPackage(String keyPackage) {
-			this.keyPackage = keyPackage;
+		public void setKeypackage(String keypackage) {
+			this.keypackage = keypackage;
 		}
-		public boolean isHasSuper() {
-			return hasSuper;
+		public ExtendEntity getExtendinfo() {
+			return extendinfo;
 		}
-		public void setHasSuper(boolean hasSuper) {
-			this.hasSuper = hasSuper;
+		public void setExtendinfo(ExtendEntity extendinfo) {
+			this.extendinfo = extendinfo;
 		}
-		public String getSuperPackage() {
-			return superPackage;
-		}
-		public void setSuperPackage(String superPackage) {
-			this.superPackage = superPackage;
-		}
+
 		
 	}
 	public static class Database {
@@ -161,6 +161,8 @@ public class JpaEntityGenProperties {
 	public static class ConvertData{
 		private String before;
 		private String after;
+		private String dbtype;
+		
 		public String getBefore() {
 			return before;
 		}
@@ -173,6 +175,38 @@ public class JpaEntityGenProperties {
 		public void setAfter(String after) {
 			this.after = after;
 		}
+		public String getDbtype() {
+			return dbtype;
+		}
+		public void setDbtype(String dbtype) {
+			this.dbtype = dbtype;
+		}
+		
+	}
+	public static class ExtendEntity {
+		
+		private String extendclass;
+		private List<String> columns;
+		private List<String> matchs;
+		public String getExtendclass() {
+			return extendclass;
+		}
+		public void setExtendclass(String extendclass) {
+			this.extendclass = extendclass;
+		}
+		public List<String> getColumns() {
+			return columns;
+		}
+		public void setColumns(List<String> columns) {
+			this.columns = columns;
+		}
+		public List<String> getMatchs() {
+			return matchs;
+		}
+		public void setMatchs(List<String> matchs) {
+			this.matchs = matchs;
+		}
+		
 		
 	}
 }

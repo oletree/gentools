@@ -5,13 +5,17 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.springframework.util.StringUtils;
+
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
+
 public class DefaultClassMap {
 
 	private static final String ANY_PREFIX = "${prefix}";
 	private static TreeMap<String, String> defaultMap = new TreeMap<>();
 	private static TreeSet<String> noImportSet = new TreeSet<>();
 	private static TreeMap<String, String> customMap = new TreeMap<>();
-	private static TreeMap<String, String> enumMap = new TreeMap<>();
+	private static TreeMap<String, ConvertData> enumMap = new TreeMap<>();
 	
 	static {
 		defaultMap.put("java.sql.Timestamp", "java.util.Date");
@@ -37,22 +41,28 @@ public class DefaultClassMap {
 		return false;
 	}
 	public static String getColumnJavaCalss(String clazzName, String dbType, String columnName) {
-		Set<Entry<String, String>> keyValues = enumMap.entrySet();
+		Set<Entry<String, ConvertData>> keyValues = enumMap.entrySet();
 		String lowColumnName = columnName.toLowerCase();
-		for(Entry<String, String> keyval : keyValues) {
+		String lowDbType = dbType.toLowerCase();
+		for(Entry<String, ConvertData> keyval : keyValues) {
 			String key = keyval.getKey();
+			ConvertData cd = keyval.getValue();
 			if(key.startsWith(ANY_PREFIX)) {
 				String suffix = key.substring(ANY_PREFIX.length()).toLowerCase();
-				if(lowColumnName.endsWith(suffix)) {
-					return keyval.getValue();
+				if(lowColumnName.endsWith(suffix) ) {
+					if(StringUtils.isEmpty(cd.getDbtype()) ) {
+						return cd.getAfter();
+					}else if(lowDbType.equals(cd.getDbtype()) ){
+						return cd.getAfter();
+					}
 				}
 			}else if( key.equals(lowColumnName)){ 
-				return keyval.getValue();
+				return cd.getAfter();
 				
 			}
 		}
-		if(customMap.containsKey(dbType.toLowerCase())) {
-			return customMap.get(dbType.toLowerCase());
+		if(customMap.containsKey(lowDbType)) {
+			return customMap.get(lowDbType);
 		}
 		return clazzName;
 	}
@@ -78,7 +88,7 @@ public class DefaultClassMap {
 		customMap.put(dbType.toLowerCase(), javaType)	;
 	}
 	
-	public static void addEnumMap(String columnName, String enumClazz) {
+	public static void addEnumMap(String columnName, ConvertData enumClazz) {
 		enumMap.put(columnName.toLowerCase(), enumClazz);
 	}
 }

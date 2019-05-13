@@ -3,41 +3,64 @@ package gentools.jpa.core.gen;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.util.StringUtils;
+
 import gentools.jpa.core.HandlerUtil;
+import gentools.jpa.core.config.JpaEntityGenProperties;
 import gentools.jpa.core.info.DbTable;
 
-public class ClazzBody {
+public class ClazzBody extends AbstractExtendProc{
+	
 	private String className;
 	private DbTable tableInfo;
 	private ClazzImport clazzImport;
 	private List<FieldBody> fieldList;
 	
-	public ClazzBody(DbTable t,String pkg, PkClazzBody pk) {
-		className = t.getClassName();
+	public ClazzBody(DbTable t,JpaEntityGenProperties prop) {
+		entityProp = prop.getEntity();
+		if(StringUtils.isEmpty(entityProp.getPrefix()) ) {
+			className = t.getClassName();
+		}else {
+			className = entityProp.getPrefix() + t.getClassName();
+		}
 		tableInfo = t;
-		clazzImport = new ClazzImport(t, pkg, pk);
-		boolean addAll = !t.isMultiPk();
+		clazzImport = new ClazzImport(t, entityProp);
+		boolean hasKeyClass = !t.isMultiPk();
 		fieldList = t.getColumns().stream()
-				.filter(c->{ return addAll || !c.isPkColumn() ;})
+				.filter(c->{ return (hasKeyClass || !c.isPkColumn()) && canAddThisColumn(tableInfo, c)  ;})
 				.map(c->{
 					return new FieldBody(c);
 				})
 				.collect(Collectors.toList());
 		
-		if(!addAll) {
+		if(!hasKeyClass) {
 			FieldBody id = new FieldBody(t);
 			fieldList.add(0, id );
 		}
 		
 	}
 	
+	public String getClassName() {
+		return className;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(clazzImport.toString()).append("\n");
 		HandlerUtil.addClassComment(sb, tableInfo.getRemarks());
-		sb.append("@Entity").append("\n");
-		sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append("\n");
-		sb.append("public class ").append(className).append(" implements Serializable {").append("\n");
+		if( entityProp.isSuperclass() ) {
+			sb.append("@MappedSuperclass").append("\n");
+		}else {
+			sb.append("@Entity").append("\n");
+			sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append("\n");
+			
+		}
+		sb.append("public class ").append(className);
+		// Extend 처리 
+		if(canAddExtendForEntity(tableInfo)) {
+			sb.append(" extends ").append(extendClassName());
+		}
+		sb.append(" implements Serializable {").append("\n");
 		sb.append("\tprivate static final long serialVersionUID = 1L;").append("\n\n");
 		for(FieldBody f : fieldList) {
 			sb.append(f.toString());

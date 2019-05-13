@@ -54,7 +54,7 @@ public class JpaEntityGen implements CommandLineRunner {
 			DefaultClassMap.addCustMap(t.getBefore(), t.getAfter());
 		}
 		for( ConvertData t: jpaEntityGenProperties.getChangetype().getEnumchange()) {
-			DefaultClassMap.addEnumMap(t.getBefore(), t.getAfter());
+			DefaultClassMap.addEnumMap(t.getBefore(), t);
 		}
 		Class.forName(jpaEntityGenProperties.getDatabase().getJdbcDriver());
 		Connection conn = DriverManager.getConnection(jpaEntityGenProperties.getDatabase().getUrl(),
