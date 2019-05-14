@@ -30,7 +30,7 @@ public class FieldBody {
 		hasColumnAnno = !HandlerUtil.isSameColumnName(fieldName, column.getColumnName());
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
-		isEnum = DefaultClassMap.getEnumJavaClass(column.getColumnName());
+		isEnum = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
 	}
 	
 	public String toString() {

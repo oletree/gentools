@@ -24,14 +24,21 @@ public class DefaultClassMap {
 		noImportSet.add("java.lang.Long");
 	}
 	
-	public static boolean getEnumJavaClass(String columnName) {
-		Set<String> keys = enumMap.keySet();
+	public static boolean getEnumJavaClass(String columnName, String dbType) {
+		Set<Entry<String, ConvertData>> keyValues = enumMap.entrySet();
 		String lowColumnName = columnName.toLowerCase();
-		for(String key : keys) {
+		String lowDbType = dbType.toLowerCase();
+		for(Entry<String, ConvertData> keyval : keyValues) {
+			String key = keyval.getKey();
+			ConvertData cd = keyval.getValue();
 			if(key.startsWith(ANY_PREFIX)) {
 				String suffix = key.substring(ANY_PREFIX.length()).toLowerCase();
 				if(lowColumnName.endsWith(suffix)) {
+					if(StringUtils.isEmpty(cd.getDbtype()) ) {
 					return true;
+					}else if(lowDbType.equals(cd.getDbtype())) {
+						return true;
+					}
 				}
 			}else if( key.equals(lowColumnName)){ 
 				return true;
