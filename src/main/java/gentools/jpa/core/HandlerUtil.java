@@ -107,6 +107,7 @@ public class HandlerUtil {
 	public static boolean isLobColumn(String typeName) {
 		String lowtypeName = typeName.toLowerCase();
 		if("text".equals(lowtypeName)) return true;
+		if("longtext".equals(lowtypeName)) return true;
 		return false;
 	}
 }
