@@ -16,6 +16,7 @@ public class FieldBody {
 	boolean isEnum = false;
 	boolean autoInc = false;
 	boolean multiKey = false;
+	boolean isLob = false;
 	public FieldBody(DbTable table) {
 		if( !table.isMultiPk() ) throw new RuntimeException("is Not Multi Key Table");
 		multiKey = true;
@@ -31,6 +32,7 @@ public class FieldBody {
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
 		isEnum = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
+		isLob = HandlerUtil.isLobColumn(column.getTypeName());
 	}
 	
 	public String toString() {
@@ -43,6 +45,9 @@ public class FieldBody {
 			}else {
 				sb.append("\t").append("@Id").append("\n");
 			}
+		}
+		if(isLob) {
+			sb.append("\t").append("@Lob").append("\n");
 		}
 		addColumnAnnotation(sb);
 		

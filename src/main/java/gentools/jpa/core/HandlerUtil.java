@@ -104,4 +104,9 @@ public class HandlerUtil {
 		}
 		sb.append(prefix).append(" */").append("\n");
 	}
+	public static boolean isLobColumn(String typeName) {
+		String lowtypeName = typeName.toLowerCase();
+		if("text".equals(lowtypeName)) return true;
+		return false;
+	}
 }
