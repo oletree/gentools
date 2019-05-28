@@ -17,20 +17,39 @@ jpaentity:
     url: jdbc:h2:file:~/h2db/smp/smp;DB_CLOSE_DELAY=-1
     username: smp
     password:
+    limitQuery: "limit 1"
   entity:
-    hasSuper: true
+    superclass: true
     prefix: Super
     writepath: ./data/out
-    entPackage: onlyone.smp.persistent.domain.rdbms
-    keyPackage: onlyone.smp.persistent.domain.keys
-    superPackage: onlyone.smp.persistent.domain.mapsuper
+    basepackage: onlyone.smp.persistent.domain.mapsuper
+    keypackage: onlyone.smp.persistent.domain.rdbmskey
+    entpackage: onlyone.smp.persistent.domain.rdbms
+    extendinfo:
+      extendclass: onlyone.smp.persistent.domain.AbstractAuditingEntity
+      columns:
+      - REG_ID
+      - REG_TS
+      - MOD_ID
+      - MOD_TS
+      matchs:  # 소문자로 넣을 것
+      - tr_brok
   changetype:
     typechange:
     -
       before: TIMESTAMP
       after: java.time.LocalDateTime
+    -
+      before: datetime
+      after: java.time.LocalDateTime
+    -
+      before: date
+      after: java.time.LocalDate
     enumchange:
+    -
+      before: {prefix}_YN
+      after: onlyone.smp.persistent.domain.enums.EYesOrNo
+      dbtype: char
     -
       before: BROK_STS_CD
       after: onlyone.smp.persistent.domain.enums.EBrokSts
-    

@@ -89,7 +89,7 @@ public class JpaEntityGen implements CommandLineRunner {
 	private TreeMap<String, String> getColType(Connection conn, String tableName) throws SQLException {
 		TreeMap<String, String> treeMap = new TreeMap<>();
 		Statement st = conn.createStatement();
-		ResultSet rs = st.executeQuery("select * from " + tableName);
+		ResultSet rs = st.executeQuery("select * from " + tableName + " " + jpaEntityGenProperties.getDatabase().getLimitQuery());
 	      ResultSetMetaData metadata = rs.getMetaData();
 	      int colcnt = metadata.getColumnCount();
 	      for (int i = 1; i <= colcnt; i++) {

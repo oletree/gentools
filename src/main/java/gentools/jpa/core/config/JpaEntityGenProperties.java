@@ -90,6 +90,7 @@ public class JpaEntityGenProperties {
 		private String url;
 		private String username;
 		private String password;
+		private String limitQuery = "";
 
 		public String getJdbcDriver() {
 			return jdbcDriver;
@@ -121,6 +122,14 @@ public class JpaEntityGenProperties {
 
 		public void setPassword(String password) {
 			this.password = password;
+		}
+
+		public String getLimitQuery() {
+			return limitQuery;
+		}
+
+		public void setLimitQuery(String limitQuery) {
+			this.limitQuery = limitQuery;
 		}
 
 	}

@@ -11,7 +11,7 @@ import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
 
 public class DefaultClassMap {
 
-	private static final String ANY_PREFIX = "${prefix}";
+	private static final String ANY_PREFIX = "{prefix}";
 	private static TreeMap<String, String> defaultMap = new TreeMap<>();
 	private static TreeSet<String> noImportSet = new TreeSet<>();
 	private static TreeMap<String, String> customMap = new TreeMap<>();
