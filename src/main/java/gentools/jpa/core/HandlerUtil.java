@@ -52,6 +52,13 @@ public class HandlerUtil {
 		return field.toLowerCase().equals(column.toLowerCase());
 	}
 	
+	public static boolean isJavaKeyString(String field) {
+		if("package".equals(field)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static String getFullClassNameToClassName(String className) {
 		int length = className.length();
 		int pos = className.lastIndexOf(".");
@@ -98,11 +105,11 @@ public class HandlerUtil {
 		addComment(sb, "\t", comments);
 	}
 	public static void addComment(StringBuilder sb,String prefix,  String... comments) {
-		sb.append(prefix).append("/**").append("\n");
+		sb.append(prefix).append("/**").append(System.lineSeparator());
 		for(String value : comments) {			
-			sb.append(prefix).append(String.format(" * %s", value)).append("\n");
+			sb.append(prefix).append(String.format(" * %s", value)).append(System.lineSeparator());
 		}
-		sb.append(prefix).append(" */").append("\n");
+		sb.append(prefix).append(" */").append(System.lineSeparator());
 	}
 	public static boolean isLobColumn(String typeName) {
 		String lowtypeName = typeName.toLowerCase();

@@ -178,6 +178,7 @@ public class JpaEntityGenProperties {
 		private String before;
 		private String after;
 		private String dbtype;
+		private boolean isString = true; // Enum String 
 		
 		public String getBefore() {
 			return before;
@@ -196,6 +197,12 @@ public class JpaEntityGenProperties {
 		}
 		public void setDbtype(String dbtype) {
 			this.dbtype = dbtype;
+		}
+		public boolean isString() {
+			return isString;
+		}
+		public void setString(boolean isString) {
+			this.isString = isString;
 		}
 		
 	}

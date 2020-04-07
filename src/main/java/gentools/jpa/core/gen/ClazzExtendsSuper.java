@@ -27,17 +27,17 @@ public class ClazzExtendsSuper {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		//Super Class Import
-		sb.append("package ").append(entpackage).append(";").append("\n");
-		sb.append("import ").append(entityProp.getBasepackage()).append(".*;").append("\n").append("\n");
+		sb.append("package ").append(entpackage).append(";").append(System.lineSeparator());
+		sb.append("import ").append(entityProp.getBasepackage()).append(".*;").append(System.lineSeparator()).append(System.lineSeparator());
 		for (String s : ClazzImport.defaultImport) {
-			sb.append("import ").append(s).append(";").append("\n");
+			sb.append("import ").append(s).append(";").append(System.lineSeparator());
 		}
 		HandlerUtil.addClassComment(sb, tableInfo.getRemarks());
-		sb.append("@Entity").append("\n");
-		sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append("\n");
+		sb.append("@Entity").append(System.lineSeparator());
+		sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append(System.lineSeparator());
 		sb.append("public class ").append(className).append(" extends ").append(entityProp.getPrefix()).append(className);
-		sb.append(" implements Serializable {").append("\n");
-		sb.append("\tprivate static final long serialVersionUID = 1L;").append("\n\n");
+		sb.append(" implements Serializable {").append(System.lineSeparator());
+		sb.append("\tprivate static final long serialVersionUID = 1L;").append(System.lineSeparator()).append(System.lineSeparator());
 		sb.append("}");
 		return sb.toString();
 	}

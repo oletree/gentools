@@ -4,6 +4,7 @@ package gentools.jpa.core.gen;
 import org.springframework.util.StringUtils;
 
 import gentools.jpa.core.HandlerUtil;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
 
@@ -14,9 +15,11 @@ public class FieldBody {
 	String fieldName;
 	String fieldType;
 	boolean isEnum = false;
+	boolean isStringEnum = true;
 	boolean autoInc = false;
 	boolean multiKey = false;
 	boolean isLob = false;
+	boolean isJavaKeyString = false; //java 예약어 여부
 	public FieldBody(DbTable table) {
 		if( !table.isMultiPk() ) throw new RuntimeException("is Not Multi Key Table");
 		multiKey = true;
@@ -28,10 +31,14 @@ public class FieldBody {
 		this.column = column;
 		idColumn = column.isPkColumn();
 		fieldName = HandlerUtil.columnToFieldName(column.getColumnName());
+		isJavaKeyString = HandlerUtil.isJavaKeyString(fieldName);
 		hasColumnAnno = !HandlerUtil.isSameColumnName(fieldName, column.getColumnName());
+		if(isJavaKeyString) hasColumnAnno = true;
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
-		isEnum = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
+		ConvertData enType = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
+		isEnum = enType != null;
+		isStringEnum = enType == null ?false : enType.isString();
 		isLob = HandlerUtil.isLobColumn(column.getTypeName());
 	}
 	
@@ -41,24 +48,32 @@ public class FieldBody {
 		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
 		if(idColumn) {
 			if(multiKey) {
-				sb.append("\t").append("@EmbeddedId").append("\n");
+				sb.append("\t").append("@EmbeddedId").append(System.lineSeparator());
 			}else {
-				sb.append("\t").append("@Id").append("\n");
+				sb.append("\t").append("@Id").append(System.lineSeparator());
 			}
 		}
 		if(isLob) {
-			sb.append("\t").append("@Lob").append("\n");
+			sb.append("\t").append("@Lob").append(System.lineSeparator());
 		}
 		addColumnAnnotation(sb);
 		
 		if(autoInc) {
-			sb.append("\t").append("@GeneratedValue(strategy = GenerationType.IDENTITY)").append("\n");
+			sb.append("\t").append("@GeneratedValue(strategy = GenerationType.IDENTITY)").append(System.lineSeparator());
 		}
 		if(isEnum) {
-			sb.append("\t").append("@Enumerated(EnumType.STRING)").append("\n");
+			if(isStringEnum) {
+				sb.append("\t").append("@Enumerated(EnumType.STRING)").append(System.lineSeparator());
+			}else {
+				sb.append("\t").append("@Enumerated(EnumType.ORDINAL)").append(System.lineSeparator());
+			}
 		}
-		sb.append("\t").append("private ").append(fieldType).append(" ").append(fieldName).append(";").append("\n");
-		sb.append("\n");
+		sb.append("\t").append("private ").append(fieldType).append(" ");
+		if(isJavaKeyString) {
+			sb.append("_");
+		}
+		sb.append(fieldName).append(";").append(System.lineSeparator());
+		sb.append(System.lineSeparator());
 		return sb.toString();
 	}
 	
@@ -109,7 +124,7 @@ public class FieldBody {
 				sb.append("columnDefinition=\"char(").append(Integer.toString(length)).append(")\"");
 				hasfirst = true;				
 			}
-			sb.append(")").append("\n");
+			sb.append(")").append(System.lineSeparator());
 		}
 
 		
@@ -118,17 +133,26 @@ public class FieldBody {
 		StringBuilder sb = new StringBuilder();
 		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
 		sb.append("\t").append("public ").append(fieldType).append(" ")
-		.append(HandlerUtil.buildAccessorName("get", fieldName)).append("() {").append("\n");
-		sb.append("\t\t").append("return this.").append(fieldName).append(";").append("\n");
-		sb.append("\t").append("}").append("\n\n");
+		.append(HandlerUtil.buildAccessorName("get", fieldName)).append("() {").append(System.lineSeparator());
+		sb.append("\t\t").append("return this.");
+		if(isJavaKeyString) sb.append("_");
+		sb.append(fieldName).append(";").append(System.lineSeparator());
+		sb.append("\t").append("}").append(System.lineSeparator()).append(System.lineSeparator());
 		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
 		sb.append("\t").append("public ").append("void").append(" ")
 		.append(HandlerUtil.buildAccessorName("set", fieldName)).append("(")
-		.append(fieldType).append(" ").append(fieldName).append(") {").append("\n");
-		sb.append("\t\t").append("this.").append(fieldName)
-		.append(" = ").append(fieldName).append(";").append("\n");
-		sb.append("\t").append("}").append("\n\n");
+		.append(fieldType).append(" ");
+		if(isJavaKeyString) sb.append("_");
+		sb.append(fieldName).append(") {").append(System.lineSeparator());
+		sb.append("\t\t").append("this.");
+		if(isJavaKeyString) sb.append("_");
+		sb.append(fieldName).append(" = ");
+		if(isJavaKeyString) sb.append("_");
+		sb.append(fieldName).append(";").append(System.lineSeparator());
+		sb.append("\t").append("}").append(System.lineSeparator()).append(System.lineSeparator());
 		return sb.toString();
 	}
+	
+	
 	
 }

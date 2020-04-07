@@ -27,8 +27,11 @@ public class GenEntityClass {
 		File basePath = Paths.get(prop.getEntity().getWritepath(), prop.getEntity().getBasepackage().replace(".", "/")).toFile(); 
 		File keyPath = Paths.get(prop.getEntity().getWritepath(), prop.getEntity().getKeypackage().replace(".", "/")).toFile();
 		File entPath = Paths.get(prop.getEntity().getWritepath(), prop.getEntity().getEntpackage().replace(".", "/")).toFile();
+		boolean enPathCheck = prop.getEntity().isSuperclass() ? entPath.isDirectory() && entPath.exists() : true;
 		
-		if(basePath.exists() && basePath.isDirectory() && keyPath.exists() && keyPath.isDirectory() ) {
+		if(basePath.exists() && basePath.isDirectory() 
+				&& keyPath.exists() && keyPath.isDirectory() 
+				&& enPathCheck) {
 			for(DbTable t : list) {
 				if(t.isMultiPk()) {
 					PkClazzBody pk = new PkClazzBody(t, prop.getEntity().getKeypackage());
@@ -55,7 +58,7 @@ public class GenEntityClass {
 				}
 			}
 		}else {
-			logger.error("is not Exist or not Directory {} , {}", basePath.getAbsolutePath() , keyPath.getAbsolutePath() );
+			logger.error("is not Exist or not Directory {} , {} , {}", basePath.getAbsolutePath() , keyPath.getAbsolutePath(), entPath.getAbsolutePath() );
 		}
 	}
 	

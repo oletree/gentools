@@ -46,13 +46,13 @@ public class ClazzBody extends AbstractExtendProc{
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(clazzImport.toString()).append("\n");
+		sb.append(clazzImport.toString()).append(System.lineSeparator());
 		HandlerUtil.addClassComment(sb, tableInfo.getRemarks());
 		if( entityProp.isSuperclass() ) {
-			sb.append("@MappedSuperclass").append("\n");
+			sb.append("@MappedSuperclass").append(System.lineSeparator());
 		}else {
-			sb.append("@Entity").append("\n");
-			sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append("\n");
+			sb.append("@Entity").append(System.lineSeparator());
+			sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append(System.lineSeparator());
 			
 		}
 		sb.append("public class ").append(className);
@@ -60,12 +60,12 @@ public class ClazzBody extends AbstractExtendProc{
 		if(canAddExtendForEntity(tableInfo)) {
 			sb.append(" extends ").append(extendClassName());
 		}
-		sb.append(" implements Serializable {").append("\n");
-		sb.append("\tprivate static final long serialVersionUID = 1L;").append("\n\n");
+		sb.append(" implements Serializable {").append(System.lineSeparator());
+		sb.append("\tprivate static final long serialVersionUID = 1L;").append(System.lineSeparator()).append(System.lineSeparator());
 		for(FieldBody f : fieldList) {
 			sb.append(f.toString());
 		}
-		sb.append("\t").append("public ").append(className).append("()").append(" {").append("\n").append("\t").append("}").append("\n\n");
+		sb.append("\t").append("public ").append(className).append("()").append(" {").append(System.lineSeparator()).append("\t").append("}").append(System.lineSeparator()).append(System.lineSeparator());
 		for(FieldBody f : fieldList) {
 			sb.append(f.toStringMethod());
 		}

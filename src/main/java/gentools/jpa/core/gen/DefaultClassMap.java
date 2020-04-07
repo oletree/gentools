@@ -24,7 +24,7 @@ public class DefaultClassMap {
 		noImportSet.add("java.lang.Long");
 	}
 	
-	public static boolean getEnumJavaClass(String columnName, String dbType) {
+	public static ConvertData getEnumJavaClass(String columnName, String dbType) {
 		Set<Entry<String, ConvertData>> keyValues = enumMap.entrySet();
 		String lowColumnName = columnName.toLowerCase();
 		String lowDbType = dbType.toLowerCase();
@@ -35,17 +35,17 @@ public class DefaultClassMap {
 				String suffix = key.substring(ANY_PREFIX.length()).toLowerCase();
 				if(lowColumnName.endsWith(suffix)) {
 					if(StringUtils.isEmpty(cd.getDbtype()) ) {
-					return true;
+					return cd;
 					}else if(lowDbType.equals(cd.getDbtype())) {
-						return true;
+						return cd;
 					}
 				}
 			}else if( key.equals(lowColumnName)){ 
-				return true;
+				return cd;
 				
 			}
 		}
-		return false;
+		return null;
 	}
 	public static String getColumnJavaCalss(String clazzName, String dbType, String columnName) {
 		Set<Entry<String, ConvertData>> keyValues = enumMap.entrySet();
