@@ -33,6 +33,7 @@ public class FieldBody {
 		fieldName = HandlerUtil.columnToFieldName(column.getColumnName());
 		isJavaKeyString = HandlerUtil.isJavaKeyString(fieldName);
 		hasColumnAnno = !HandlerUtil.isSameColumnName(fieldName, column.getColumnName());
+		hasColumnAnno = hasColumnAnno ?  hasColumnAnno : HandlerUtil.isAddColumnNameAnnonString(column.getColumnName());
 		if(isJavaKeyString) hasColumnAnno = true;
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
@@ -100,7 +101,12 @@ public class FieldBody {
 		if(hasColumnAnno ||addLength || addColumnDefinition || addUnique || addNullable) {
 			sb.append("\t@Column(");
 			if(hasColumnAnno) {
-				sb.append("name=\"").append(column.getColumnName()).append("\"");
+				sb.append("name=\"");
+				//별칭 처리를 위해 [ 와 ]를 넣음
+				if( HandlerUtil.isAddColumnNameAnnonString(column.getColumnName())) sb.append("`");
+				sb.append(column.getColumnName());
+				if( HandlerUtil.isAddColumnNameAnnonString(column.getColumnName())) sb.append("`");
+				sb.append("\"");
 				hasfirst = true;
 			}
 			if(addUnique) {

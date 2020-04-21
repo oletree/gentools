@@ -59,6 +59,16 @@ public class HandlerUtil {
 		return false;
 	}
 	
+	public static boolean isAddColumnNameAnnonString(String field) {
+		if("column".equals(field)) {
+			return true;
+		}
+		if("value".equals(field)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static String getFullClassNameToClassName(String className) {
 		int length = className.length();
 		int pos = className.lastIndexOf(".");
