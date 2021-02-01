@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import gentools.jpa.core.HandlerUtil;
+import gentools.jpa.core.config.JpaEntityGenProperties;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
 import gentools.jpa.core.info.DbTable;
 
 public class PkClazzBody {
@@ -18,15 +20,19 @@ public class PkClazzBody {
 		return className;
 	}
 	
-	public PkClazzBody(DbTable table, String pkg){
-		pkgName = pkg;
+	public PkClazzBody(DbTable table, JpaEntityGenProperties prop){
+		
+		pkgName = prop.getEntity().getKeypackage();
 		tableName = table.getTableName();
 		className = table.getClassName() + "PK";
-		clazzImport = new ClazzImport(table, pkg, true);
+		clazzImport = new ClazzImport(table, pkgName,prop.getEntity(), true);
+		
+		ConvertInfo myConvertInfos = HandlerUtil.getTableConverts(tableName, prop.getEntity());
+		
 		fieldList = table.getColumns().stream()
 				.filter(c->{ return c.isPkColumn() ;})
 				.map(c->{
-					FieldBody f =  new FieldBody(c);
+					FieldBody f =  new FieldBody(c, myConvertInfos);
 					f.idColumn = false;
 					return f;
 				})

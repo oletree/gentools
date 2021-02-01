@@ -2,6 +2,8 @@ package gentools.jpa.core.gen;
 
 import java.util.TreeSet;
 
+import gentools.jpa.core.HandlerUtil;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
 import gentools.jpa.core.config.JpaEntityGenProperties.Entity;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
@@ -21,25 +23,36 @@ public class ClazzImport extends AbstractExtendProc {
 		init();
 	}
 	
-	public ClazzImport(DbTable table, String pkg, boolean onlyPk) {
+	public ClazzImport(DbTable table, String pkg, Entity prop, boolean onlyPk) {
 		pakcageOut = pkg;
 		pkClass = onlyPk;
 		tableInfo = table;
+		entityProp = prop;
 		init();
 	}
 
+	private void addImportOut(String clazzName) {
+		if(clazzName == null) return;
+		if(DefaultClassMap.addImport(clazzName)  && ! importOut.contains(clazzName)) {
+			importOut.add(clazzName);
+		}
+	}
 	private void init() {
-		
+		//Column Convert 추가 하기
+		String tableName = tableInfo.getTableName();
+		ConvertInfo myConvertInfo = HandlerUtil.getTableConverts(tableName, entityProp);
 		for( DbColumn c : tableInfo.getColumns() ) {
 			if(canAddThisColumn(tableInfo, c)) {
-				if(DefaultClassMap.addImport(c.getJavaClassName())  && ! importOut.contains(c.getJavaClassName())) {
-					if(pkClass) {
-						if(c.isPkColumn()) importOut.add(c.getJavaClassName());
-					}else {
-						if( !tableInfo.isMultiPk() || !c.isPkColumn()) {
-							importOut.add(c.getJavaClassName());						
-						}
+				if(pkClass) {
+					if( c.isPkColumn() ) {
+						addImportOut(c.getJavaClassName());
+						String convertClazz = HandlerUtil.getColumnConverts(c.getColumnName(), myConvertInfo);
+						addImportOut(convertClazz);
 					}
+				}else if( !tableInfo.isMultiPk() || !c.isPkColumn()) {
+					addImportOut(c.getJavaClassName());
+					String convertClazz = HandlerUtil.getColumnConverts(c.getColumnName(), myConvertInfo);
+					addImportOut(convertClazz);
 				}
 			}
 		}

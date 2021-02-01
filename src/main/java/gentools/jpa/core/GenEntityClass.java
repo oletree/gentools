@@ -34,7 +34,7 @@ public class GenEntityClass {
 				&& enPathCheck) {
 			for(DbTable t : list) {
 				if(t.isMultiPk()) {
-					PkClazzBody pk = new PkClazzBody(t, prop.getEntity().getKeypackage());
+					PkClazzBody pk = new PkClazzBody(t, prop);
 					File file = new File(keyPath, pk.getClassName() + ".java");
 					PrintStream out = new PrintStream(new FileOutputStream(file), true, "UTF-8");
 					out.print(pk.toString());

@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 import org.springframework.util.StringUtils;
 
-import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
+import gentools.jpa.core.config.JpaEntityGenProperties.JavaTypeChange;
 
 public class DefaultClassMap {
 
@@ -15,7 +15,7 @@ public class DefaultClassMap {
 	private static TreeMap<String, String> defaultMap = new TreeMap<>();
 	private static TreeSet<String> noImportSet = new TreeSet<>();
 	private static TreeMap<String, String> customMap = new TreeMap<>();
-	private static TreeMap<String, ConvertData> enumMap = new TreeMap<>();
+	private static TreeMap<String, JavaTypeChange> enumMap = new TreeMap<>();
 	
 	static {
 		defaultMap.put("java.sql.Timestamp", "java.util.Date");
@@ -24,13 +24,13 @@ public class DefaultClassMap {
 		noImportSet.add("java.lang.Long");
 	}
 	
-	public static ConvertData getEnumJavaClass(String columnName, String dbType) {
-		Set<Entry<String, ConvertData>> keyValues = enumMap.entrySet();
+	public static JavaTypeChange getEnumJavaClass(String columnName, String dbType) {
+		Set<Entry<String, JavaTypeChange>> keyValues = enumMap.entrySet();
 		String lowColumnName = columnName.toLowerCase();
 		String lowDbType = dbType.toLowerCase();
-		for(Entry<String, ConvertData> keyval : keyValues) {
+		for(Entry<String, JavaTypeChange> keyval : keyValues) {
 			String key = keyval.getKey();
-			ConvertData cd = keyval.getValue();
+			JavaTypeChange cd = keyval.getValue();
 			if(key.startsWith(ANY_PREFIX)) {
 				String suffix = key.substring(ANY_PREFIX.length()).toLowerCase();
 				if(lowColumnName.endsWith(suffix)) {
@@ -48,12 +48,12 @@ public class DefaultClassMap {
 		return null;
 	}
 	public static String getColumnJavaCalss(String clazzName, String dbType, String columnName) {
-		Set<Entry<String, ConvertData>> keyValues = enumMap.entrySet();
+		Set<Entry<String, JavaTypeChange>> keyValues = enumMap.entrySet();
 		String lowColumnName = columnName.toLowerCase();
 		String lowDbType = dbType.toLowerCase();
-		for(Entry<String, ConvertData> keyval : keyValues) {
+		for(Entry<String, JavaTypeChange> keyval : keyValues) {
 			String key = keyval.getKey();
-			ConvertData cd = keyval.getValue();
+			JavaTypeChange cd = keyval.getValue();
 			if(key.startsWith(ANY_PREFIX)) {
 				String suffix = key.substring(ANY_PREFIX.length()).toLowerCase();
 				if(lowColumnName.endsWith(suffix) ) {
@@ -95,7 +95,7 @@ public class DefaultClassMap {
 		customMap.put(dbType.toLowerCase(), javaType)	;
 	}
 	
-	public static void addEnumMap(String columnName, ConvertData enumClazz) {
+	public static void addEnumMap(String columnName, JavaTypeChange enumClazz) {
 		enumMap.put(columnName.toLowerCase(), enumClazz);
 	}
 }

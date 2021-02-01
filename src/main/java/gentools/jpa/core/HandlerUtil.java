@@ -5,8 +5,28 @@ import java.util.List;
 import org.h2.util.StringUtils;
 
 import gentools.jpa.core.config.JpaEntityGenProperties;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertColumn;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
+import gentools.jpa.core.config.JpaEntityGenProperties.Entity;
 
 public class HandlerUtil {
+	
+	public static ConvertInfo getTableConverts(String tableName, Entity prop) {
+		
+		for(ConvertInfo c : prop.getConvertinfos()) {
+			if(tableName.equalsIgnoreCase(c.getTablename()) ) return c;
+		}
+		return null;
+	}
+	
+	public static String getColumnConverts(String columnName, ConvertInfo myConvertInfo) {
+		if(myConvertInfo != null) {
+			for(ConvertColumn ce : myConvertInfo.getColumns()) {
+				if( columnName.equalsIgnoreCase(ce.getColumnname()) ) return ce.getConvertclass(); 
+			}
+		}
+		return null;
+	}
 	
 	public static boolean tableSelector(String tableName, JpaEntityGenProperties prop) {
 		String checkName = prop.getSelector().isLowercase() ? tableName.toLowerCase(): tableName;

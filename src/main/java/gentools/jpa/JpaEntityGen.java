@@ -25,7 +25,7 @@ import gentools.jpa.core.GenEntityClass;
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenConstants;
 import gentools.jpa.core.config.JpaEntityGenProperties;
-import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
+import gentools.jpa.core.config.JpaEntityGenProperties.JavaTypeChange;
 import gentools.jpa.core.gen.DefaultClassMap;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
@@ -50,10 +50,10 @@ public class JpaEntityGen implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		for( ConvertData t: jpaEntityGenProperties.getChangetype().getTypechange()) {
+		for( JavaTypeChange t: jpaEntityGenProperties.getChangetype().getTypechange()) {
 			DefaultClassMap.addCustMap(t.getBefore(), t.getAfter());
 		}
-		for( ConvertData t: jpaEntityGenProperties.getChangetype().getEnumchange()) {
+		for( JavaTypeChange t: jpaEntityGenProperties.getChangetype().getEnumchange()) {
 			DefaultClassMap.addEnumMap(t.getBefore(), t);
 		}
 		Class.forName(jpaEntityGenProperties.getDatabase().getJdbcDriver());

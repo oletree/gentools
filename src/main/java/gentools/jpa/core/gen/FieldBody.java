@@ -1,10 +1,14 @@
 package gentools.jpa.core.gen;
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.util.StringUtils;
 
 import gentools.jpa.core.HandlerUtil;
-import gentools.jpa.core.config.JpaEntityGenProperties.ConvertData;
+import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
+import gentools.jpa.core.config.JpaEntityGenProperties.JavaTypeChange;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
 
@@ -20,6 +24,8 @@ public class FieldBody {
 	boolean multiKey = false;
 	boolean isLob = false;
 	boolean isJavaKeyString = false; //java 예약어 여부
+	boolean hasConverter = false;
+	List<String> convertList;
 	public FieldBody(DbTable table) {
 		if( !table.isMultiPk() ) throw new RuntimeException("is Not Multi Key Table");
 		multiKey = true;
@@ -27,7 +33,7 @@ public class FieldBody {
 		fieldType = table.getClassName() + "PK";
 		idColumn = true;
 	}
-	public FieldBody(DbColumn column) {
+	public FieldBody(DbColumn column, ConvertInfo myConvertInfo) {
 		this.column = column;
 		idColumn = column.isPkColumn();
 		fieldName = HandlerUtil.columnToFieldName(column.getColumnName());
@@ -37,10 +43,18 @@ public class FieldBody {
 		if(isJavaKeyString) hasColumnAnno = true;
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
-		ConvertData enType = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
+		JavaTypeChange enType = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
 		isEnum = enType != null;
 		isStringEnum = enType == null ?false : enType.isString();
 		isLob = HandlerUtil.isLobColumn(column.getTypeName());
+		
+		if(myConvertInfo != null) {
+			String columnName = column.getColumnName();
+			convertList = myConvertInfo.getColumns().stream().filter( f -> columnName.equalsIgnoreCase(f.getColumnname()) )
+			.map(m -> m.getConvertclass() ).collect(Collectors.toList());
+		}
+		
+		if( convertList!= null && ! convertList.isEmpty() ) hasConverter = true;
 	}
 	
 	public String toString() {
@@ -67,6 +81,12 @@ public class FieldBody {
 				sb.append("\t").append("@Enumerated(EnumType.STRING)").append(System.lineSeparator());
 			}else {
 				sb.append("\t").append("@Enumerated(EnumType.ORDINAL)").append(System.lineSeparator());
+			}
+		}
+		if(hasConverter) {
+			for(String convClass : convertList) {
+				sb.append("\t").append("@Convert(converter = ")
+				.append(HandlerUtil.getFullClassNameToClassName(convClass)).append(".class)").append(System.lineSeparator());
 			}
 		}
 		sb.append("\t").append("private ").append(fieldType).append(" ");

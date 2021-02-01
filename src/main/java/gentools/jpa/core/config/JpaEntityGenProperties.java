@@ -11,7 +11,7 @@ public class JpaEntityGenProperties {
 	private final Database database = new Database();
 	private final Entity entity = new Entity();
 	private final ListData changetype = new ListData();
-
+	
 	
 	public Selector getSelector() {
 		return selector;
@@ -39,6 +39,7 @@ public class JpaEntityGenProperties {
 		private String keypackage;
 		private String entpackage;
 		private ExtendEntity extendinfo;
+		private List<ConvertInfo> convertinfos;
 		
 		public boolean isSuperclass() {
 			return superclass;
@@ -82,9 +83,15 @@ public class JpaEntityGenProperties {
 		public void setExtendinfo(ExtendEntity extendinfo) {
 			this.extendinfo = extendinfo;
 		}
-
+		public List<ConvertInfo> getConvertinfos() {
+			return convertinfos;
+		}
+		public void setConvertinfos(List<ConvertInfo> convertinfos) {
+			this.convertinfos = convertinfos;
+		}
 		
 	}
+
 	public static class Database {
 		private String jdbcDriver;
 		private String url;
@@ -158,23 +165,23 @@ public class JpaEntityGenProperties {
 		
 	}
 	public static class ListData {
-		private List<ConvertData> typechange;
-		private List<ConvertData> enumchange;
-		public List<ConvertData> getTypechange() {
+		private List<JavaTypeChange> typechange;
+		private List<JavaTypeChange> enumchange;
+		public List<JavaTypeChange> getTypechange() {
 			return typechange;
 		}
-		public void setTypechange(List<ConvertData> typechange) {
+		public void setTypechange(List<JavaTypeChange> typechange) {
 			this.typechange = typechange;
 		}
-		public List<ConvertData> getEnumchange() {
+		public List<JavaTypeChange> getEnumchange() {
 			return enumchange;
 		}
-		public void setEnumchange(List<ConvertData> enumchange) {
+		public void setEnumchange(List<JavaTypeChange> enumchange) {
 			this.enumchange = enumchange;
 		}
 		
 	}
-	public static class ConvertData{
+	public static class JavaTypeChange{
 		private String before;
 		private String after;
 		private String dbtype;
@@ -229,7 +236,40 @@ public class JpaEntityGenProperties {
 		public void setMatchs(List<String> matchs) {
 			this.matchs = matchs;
 		}
-		
+	}
+	
+	public static class ConvertInfo {
+		private String tablename;
+		private List<ConvertColumn> columns;
+		public String getTablename() {
+			return tablename;
+		}
+		public void setTablename(String tablename) {
+			this.tablename = tablename;
+		}
+		public List<ConvertColumn> getColumns() {
+			return columns;
+		}
+		public void setColumns(List<ConvertColumn> columns) {
+			this.columns = columns;
+		}
+	}
+	
+	public static class ConvertColumn {
+		private String columnname;
+		private String convertclass;
+		public String getColumnname() {
+			return columnname;
+		}
+		public void setColumnname(String columnname) {
+			this.columnname = columnname;
+		}
+		public String getConvertclass() {
+			return convertclass;
+		}
+		public void setConvertclass(String convertclass) {
+			this.convertclass = convertclass;
+		}
 		
 	}
 }
