@@ -13,8 +13,10 @@ public class HandlerUtil {
 	
 	public static ConvertInfo getTableConverts(String tableName, Entity prop) {
 		
-		for(ConvertInfo c : prop.getConvertinfos()) {
-			if(tableName.equalsIgnoreCase(c.getTablename()) ) return c;
+		if( prop.getConvertinfos() != null) {
+			for(ConvertInfo c : prop.getConvertinfos()) {
+				if(tableName.equalsIgnoreCase(c.getTablename()) ) return c;
+			}
 		}
 		return null;
 	}
