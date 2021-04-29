@@ -40,7 +40,7 @@ public class JpaEntityGenProperties {
 		private String entpackage;
 		private ExtendEntity extendinfo;
 		private List<ConvertInfo> convertinfos;
-		
+		private List<GeneratorInfo> generators;
 		public boolean isSuperclass() {
 			return superclass;
 		}
@@ -88,6 +88,12 @@ public class JpaEntityGenProperties {
 		}
 		public void setConvertinfos(List<ConvertInfo> convertinfos) {
 			this.convertinfos = convertinfos;
+		}
+		public List<GeneratorInfo> getGenerators() {
+			return generators;
+		}
+		public void setGenerators(List<GeneratorInfo> generators) {
+			this.generators = generators;
 		}
 		
 	}
@@ -270,6 +276,38 @@ public class JpaEntityGenProperties {
 		public void setConvertclass(String convertclass) {
 			this.convertclass = convertclass;
 		}
+		
+	}
+	public static class GeneratorInfo {
+		private String tablename;
+		private String columnname;
+		private String generatorname;
+		private String generatorpkg;
+		public String getTablename() {
+			return tablename;
+		}
+		public void setTablename(String tablename) {
+			this.tablename = tablename;
+		}
+		public String getColumnname() {
+			return columnname;
+		}
+		public void setColumnname(String columnname) {
+			this.columnname = columnname;
+		}
+		public String getGeneratorname() {
+			return generatorname;
+		}
+		public void setGeneratorname(String generatorname) {
+			this.generatorname = generatorname;
+		}
+		public String getGeneratorpkg() {
+			return generatorpkg;
+		}
+		public void setGeneratorpkg(String generatorpkg) {
+			this.generatorpkg = generatorpkg;
+		}
+		
 		
 	}
 }

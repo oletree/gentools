@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
+import gentools.jpa.core.config.JpaEntityGenProperties.GeneratorInfo;
 import gentools.jpa.core.config.JpaEntityGenProperties.JavaTypeChange;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
@@ -26,6 +27,7 @@ public class FieldBody {
 	boolean isJavaKeyString = false; //java 예약어 여부
 	boolean hasConverter = false;
 	List<String> convertList;
+	GeneratorInfo generator;
 	public FieldBody(DbTable table) {
 		if( !table.isMultiPk() ) throw new RuntimeException("is Not Multi Key Table");
 		multiKey = true;
@@ -33,8 +35,9 @@ public class FieldBody {
 		fieldType = table.getClassName() + "PK";
 		idColumn = true;
 	}
-	public FieldBody(DbColumn column, ConvertInfo myConvertInfo) {
+	public FieldBody(DbColumn column, ConvertInfo myConvertInfo, GeneratorInfo generator) {
 		this.column = column;
+		this.generator = generator;
 		idColumn = column.isPkColumn();
 		fieldName = HandlerUtil.columnToFieldName(column.getColumnName());
 		isJavaKeyString = HandlerUtil.isJavaKeyString(fieldName);
@@ -74,7 +77,18 @@ public class FieldBody {
 		addColumnAnnotation(sb);
 		
 		if(autoInc) {
-			sb.append("\t").append("@GeneratedValue(strategy = GenerationType.IDENTITY)").append(System.lineSeparator());
+			sb.append("\t").append("@GeneratedValue(strategy = GenerationType.IDENTITY");
+			if(generator != null) {
+				sb.append(", generator=\"").append(generator.getGeneratorname()).append("\"");
+			}
+			sb.append(")").append(System.lineSeparator());
+			if(generator != null) {
+				sb.append("\t")
+				.append("@GenericGenerator(name = \"").append(generator.getGeneratorname()).append("\", strategy = \"")
+				.append(generator.getGeneratorpkg()).append("\")")
+				.append(System.lineSeparator());
+			}
+
 		}
 		if(isEnum) {
 			if(isStringEnum) {

@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenProperties;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
+import gentools.jpa.core.config.JpaEntityGenProperties.GeneratorInfo;
 import gentools.jpa.core.info.DbTable;
 
 public class ClazzBody extends AbstractExtendProc{
@@ -28,13 +29,14 @@ public class ClazzBody extends AbstractExtendProc{
 		String lowTableName = tableInfo.getTableName();
 		
 		ConvertInfo myConvertInfos = HandlerUtil.getTableConverts(lowTableName, entityProp);
+		GeneratorInfo myGenerator = HandlerUtil.getTableGenerator(lowTableName, entityProp); 
 
 		clazzImport = new ClazzImport(t, entityProp);
 		boolean hasKeyClass = !t.isMultiPk();
 		fieldList = t.getColumns().stream()
 				.filter(c->{ return (hasKeyClass || !c.isPkColumn()) && canAddThisColumn(tableInfo, c)  ;})
 				.map(c->{
-					return new FieldBody(c, myConvertInfos);
+					return new FieldBody(c, myConvertInfos, myGenerator);
 				})
 				.collect(Collectors.toList());
 		

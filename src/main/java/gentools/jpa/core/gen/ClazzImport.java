@@ -5,6 +5,7 @@ import java.util.TreeSet;
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
 import gentools.jpa.core.config.JpaEntityGenProperties.Entity;
+import gentools.jpa.core.config.JpaEntityGenProperties.GeneratorInfo;
 import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
 import liquibase.util.StringUtils;
@@ -41,6 +42,7 @@ public class ClazzImport extends AbstractExtendProc {
 		//Column Convert 추가 하기
 		String tableName = tableInfo.getTableName();
 		ConvertInfo myConvertInfo = HandlerUtil.getTableConverts(tableName, entityProp);
+		GeneratorInfo myGenerator = HandlerUtil.getTableGenerator(tableName, entityProp);
 		for( DbColumn c : tableInfo.getColumns() ) {
 			if(canAddThisColumn(tableInfo, c)) {
 				if(pkClass) {
@@ -58,6 +60,9 @@ public class ClazzImport extends AbstractExtendProc {
 		}
 		if(canAddExtendForEntity(tableInfo)) {
 			importOut.add(entityProp.getExtendinfo().getExtendclass());
+		}
+		if(myGenerator != null) {
+			importOut.add("org.hibernate.annotations.GenericGenerator");
 		}
 	}
 

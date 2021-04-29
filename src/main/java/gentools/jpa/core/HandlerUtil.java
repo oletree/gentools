@@ -8,8 +8,18 @@ import gentools.jpa.core.config.JpaEntityGenProperties;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertColumn;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
 import gentools.jpa.core.config.JpaEntityGenProperties.Entity;
+import gentools.jpa.core.config.JpaEntityGenProperties.GeneratorInfo;
 
 public class HandlerUtil {
+	
+	public static GeneratorInfo getTableGenerator(String tableName, Entity prop) {
+		if(prop.getGenerators() != null) {
+			for(GeneratorInfo c: prop.getGenerators()) {
+				if(tableName.equalsIgnoreCase(c.getTablename())) return c;
+			}
+		}
+		return null;
+	}
 	
 	public static ConvertInfo getTableConverts(String tableName, Entity prop) {
 		
@@ -149,4 +159,6 @@ public class HandlerUtil {
 		if("longtext".equals(lowtypeName)) return true;
 		return false;
 	}
+
+
 }

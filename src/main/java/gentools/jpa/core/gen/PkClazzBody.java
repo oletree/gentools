@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenProperties;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
+import gentools.jpa.core.config.JpaEntityGenProperties.GeneratorInfo;
 import gentools.jpa.core.info.DbTable;
 
 public class PkClazzBody {
@@ -28,11 +29,12 @@ public class PkClazzBody {
 		clazzImport = new ClazzImport(table, pkgName,prop.getEntity(), true);
 		
 		ConvertInfo myConvertInfos = HandlerUtil.getTableConverts(tableName, prop.getEntity());
+		GeneratorInfo myGenerator = HandlerUtil.getTableGenerator(tableName, prop.getEntity());
 		
 		fieldList = table.getColumns().stream()
 				.filter(c->{ return c.isPkColumn() ;})
 				.map(c->{
-					FieldBody f =  new FieldBody(c, myConvertInfos);
+					FieldBody f =  new FieldBody(c,myConvertInfos, myGenerator);
 					f.idColumn = false;
 					return f;
 				})
