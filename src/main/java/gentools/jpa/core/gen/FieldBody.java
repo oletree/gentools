@@ -47,7 +47,7 @@ public class FieldBody {
 		fieldType = HandlerUtil.getFullClassNameToClassName( column.getJavaClassName() );
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
 		JavaTypeChange enType = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
-		isEnum = enType != null;
+		isEnum = enType != null ? enType.isEnum(): false;
 		isStringEnum = enType == null ?false : enType.isString();
 		isLob = HandlerUtil.isLobColumn(column.getTypeName());
 		

@@ -192,6 +192,7 @@ public class JpaEntityGenProperties {
 		private String after;
 		private String dbtype;
 		private boolean isString = true; // Enum String 
+		private boolean isEnum = true;
 		
 		public String getBefore() {
 			return before;
@@ -217,6 +218,13 @@ public class JpaEntityGenProperties {
 		public void setString(boolean isString) {
 			this.isString = isString;
 		}
+		public boolean isEnum() {
+			return isEnum;
+		}
+		public void setEnum(boolean isEnum) {
+			this.isEnum = isEnum;
+		}
+		
 		
 	}
 	public static class ExtendEntity {
