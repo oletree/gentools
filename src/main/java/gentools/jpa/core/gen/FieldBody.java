@@ -14,6 +14,7 @@ import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
 
 public class FieldBody {
+	
 	DbColumn column;
 	boolean hasColumnAnno = false;
 	boolean idColumn = false;
@@ -122,7 +123,15 @@ public class FieldBody {
 		if(column.getJavaClassName().equals("java.lang.String")) {
 			addLength = true;
 		}
-		if("char".equals(column.getTypeName().toLowerCase()) ) {
+		
+		
+		if("char".equals(column.getTypeName().toLowerCase())) {
+			addColumnDefinition = true;
+		}
+		
+		if(isLob) addColumnDefinition = true;
+		
+		if(addLength && !"varchar".equals(column.getTypeName().toLowerCase())) {
 			addColumnDefinition = true;
 		}
 		if("no".equals(column.getIsNullAble().toLowerCase())) {
@@ -161,7 +170,13 @@ public class FieldBody {
 			}
 			if(addColumnDefinition) {
 				if(hasfirst)sb.append(", ");
-				sb.append("columnDefinition=\"char(").append(Integer.toString(length)).append(")\"");
+				sb.append("columnDefinition=\"");
+				if("char".equals(column.getTypeName().toLowerCase()) ) {
+					sb.append("char(").append(Integer.toString(length)).append(")");
+				}else {
+					sb.append(column.getTypeName());
+				}
+				sb.append("\"");
 				hasfirst = true;				
 			}
 			sb.append(")").append(System.lineSeparator());

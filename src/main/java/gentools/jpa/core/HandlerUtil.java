@@ -92,10 +92,14 @@ public class HandlerUtil {
 	}
 	
 	public static boolean isAddColumnNameAnnonString(String field) {
-		if("column".equals(field)) {
+		String lowfield = field.toLowerCase();
+		if("column".equals(lowfield)) {
 			return true;
 		}
-		if("value".equals(field)) {
+		if("value".equals(lowfield)) {
+			return true;
+		}
+		if("desc".equals(lowfield)) {
 			return true;
 		}
 		return false;
