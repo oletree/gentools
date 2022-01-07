@@ -9,6 +9,7 @@ public class DbTable {
 	private String remarks;
 	private boolean multiPk = false;
 	private List<DbColumn> columns;
+	private boolean persistable = false;
 	
 	public boolean isMultiPk() {
 		return multiPk;
@@ -52,6 +53,16 @@ public class DbTable {
 		this.columns = columns;
 	}
 	
+	
+	
+	public boolean isPersistable() {
+		return persistable;
+	}
+
+	public void setPersistable(boolean persistable) {
+		this.persistable = persistable;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("tableName=").append(tableName).append(",");

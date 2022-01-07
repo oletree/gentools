@@ -1,7 +1,7 @@
 package gentools.jpa.core.gen;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.util.StringUtils;
 
@@ -9,6 +9,7 @@ import gentools.jpa.core.HandlerUtil;
 import gentools.jpa.core.config.JpaEntityGenProperties;
 import gentools.jpa.core.config.JpaEntityGenProperties.ConvertInfo;
 import gentools.jpa.core.config.JpaEntityGenProperties.GeneratorInfo;
+import gentools.jpa.core.info.DbColumn;
 import gentools.jpa.core.info.DbTable;
 
 public class ClazzBody extends AbstractExtendProc{
@@ -17,6 +18,8 @@ public class ClazzBody extends AbstractExtendProc{
 	private DbTable tableInfo;
 	private ClazzImport clazzImport;
 	private List<FieldBody> fieldList;
+	private String keyClassName = null;
+	private boolean hasKeyClass = false;
 	
 	public ClazzBody(DbTable t,JpaEntityGenProperties prop) {
 		entityProp = prop.getEntity();
@@ -32,18 +35,23 @@ public class ClazzBody extends AbstractExtendProc{
 		GeneratorInfo myGenerator = HandlerUtil.getTableGenerator(lowTableName, entityProp); 
 
 		clazzImport = new ClazzImport(t, entityProp);
-		boolean hasKeyClass = !t.isMultiPk();
-		fieldList = t.getColumns().stream()
-				.filter(c->{ return (hasKeyClass || !c.isPkColumn()) && canAddThisColumn(tableInfo, c)  ;})
-				.map(c->{
-					return new FieldBody(c, myConvertInfos, myGenerator);
-				})
-				.collect(Collectors.toList());
+		hasKeyClass = !t.isMultiPk();
+		FieldBody keyFiled = null;
+		fieldList = new ArrayList<FieldBody>();
+		
+		for(DbColumn c : t.getColumns()) {
+			if(c.isPkColumn() && !hasKeyClass) keyFiled = new FieldBody(c, myConvertInfos, myGenerator); 
+			if ( (hasKeyClass || !c.isPkColumn()) && canAddThisColumn(tableInfo, c)){
+				fieldList.add( new FieldBody(c, myConvertInfos, myGenerator) );
+			}
+		}
+				
 		
 		if(!hasKeyClass) {
-			FieldBody id = new FieldBody(t);
-			fieldList.add(0, id );
+			keyFiled = new FieldBody(t);
+			fieldList.add(0, keyFiled  );
 		}
+		if(keyFiled != null) keyClassName = keyFiled.getFieldType(); 
 		
 	}
 	
@@ -67,7 +75,11 @@ public class ClazzBody extends AbstractExtendProc{
 		if(canAddExtendForEntity(tableInfo)) {
 			sb.append(" extends ").append(extendClassName());
 		}
-		sb.append(" implements Serializable {").append(System.lineSeparator());
+		sb.append(" implements Serializable");
+		if(! entityProp.isSuperclass() && canAddExtendPersistable(tableInfo)) {
+			sb.append(", Persistable<").append(keyClassName).append(">");
+		}
+		sb.append(" {").append(System.lineSeparator());
 		sb.append("\tprivate static final long serialVersionUID = 1L;").append(System.lineSeparator()).append(System.lineSeparator());
 		for(FieldBody f : fieldList) {
 			sb.append(f.toString());

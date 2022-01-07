@@ -164,5 +164,14 @@ public class HandlerUtil {
 		return false;
 	}
 
+	public static boolean isPersistable(String tableName, Entity prop) {
+		
+		if(prop.getPersistable() != null) {
+			for(String c: prop.getPersistable()) {
+				if(tableName.equalsIgnoreCase(c)) return true;
+			}
+		}
+		return false;
+	}
 
 }

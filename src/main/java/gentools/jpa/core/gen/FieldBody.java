@@ -207,6 +207,10 @@ public class FieldBody {
 		sb.append("\t").append("}").append(System.lineSeparator()).append(System.lineSeparator());
 		return sb.toString();
 	}
+	public String getFieldType() {
+		return fieldType;
+	}
+
 	
 	
 	

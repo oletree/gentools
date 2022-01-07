@@ -81,6 +81,9 @@ public class JpaEntityGen implements CommandLineRunner {
 			TreeMap<String, String> colJavaType = getColType(conn, tableName);
 			table.setColumns(getTableColums(md, tableName, pk, colJavaType));
 			if(pk.size() > 1) table.setMultiPk(true);
+			
+			table.setPersistable(HandlerUtil.isPersistable(tableName, jpaEntityGenProperties.getEntity()));
+			
 		}
 		genEntityClass.write(list);
 		conn.close();

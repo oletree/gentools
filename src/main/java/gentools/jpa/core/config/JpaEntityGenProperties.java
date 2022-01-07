@@ -41,6 +41,7 @@ public class JpaEntityGenProperties {
 		private ExtendEntity extendinfo;
 		private List<ConvertInfo> convertinfos;
 		private List<GeneratorInfo> generators;
+		private List<String> persistable;
 		public boolean isSuperclass() {
 			return superclass;
 		}
@@ -94,6 +95,12 @@ public class JpaEntityGenProperties {
 		}
 		public void setGenerators(List<GeneratorInfo> generators) {
 			this.generators = generators;
+		}
+		public List<String> getPersistable() {
+			return persistable;
+		}
+		public void setPersistable(List<String> persistable) {
+			this.persistable = persistable;
 		}
 		
 	}

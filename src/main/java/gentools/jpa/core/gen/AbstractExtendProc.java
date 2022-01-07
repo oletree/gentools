@@ -29,6 +29,10 @@ public abstract class AbstractExtendProc {
 		}
 		return true;
 	}
+	
+	protected boolean canAddExtendPersistable(DbTable table) {
+		return table.isPersistable();
+	}
 
 	protected String extendClassName() {
 		String className = extendInfo.getExtendclass();
