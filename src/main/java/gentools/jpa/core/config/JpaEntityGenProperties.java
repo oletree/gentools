@@ -32,6 +32,7 @@ public class JpaEntityGenProperties {
 
 
 	public static class Entity{
+		private boolean addschema = false;
 		private boolean superclass = false;
 		private String prefix = "";
 		private String writepath;
@@ -42,6 +43,13 @@ public class JpaEntityGenProperties {
 		private List<ConvertInfo> convertinfos;
 		private List<GeneratorInfo> generators;
 		private List<String> persistable;
+		
+		public boolean isAddschema() {
+			return addschema;
+		}
+		public void setAddschema(boolean addschema) {
+			this.addschema = addschema;
+		}
 		public boolean isSuperclass() {
 			return superclass;
 		}

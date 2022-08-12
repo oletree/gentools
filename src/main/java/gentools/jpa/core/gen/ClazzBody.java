@@ -67,7 +67,11 @@ public class ClazzBody extends AbstractExtendProc{
 			sb.append("@MappedSuperclass").append(System.lineSeparator());
 		}else {
 			sb.append("@Entity").append(System.lineSeparator());
-			sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append(System.lineSeparator());
+			sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\"");
+			if(tableInfo.isAddschema()) {
+				sb.append(", schema=\"").append(tableInfo.getSchemaName()).append("\"");
+			}
+			sb.append(")").append(System.lineSeparator());
 			
 		}
 		sb.append("public class ").append(className);

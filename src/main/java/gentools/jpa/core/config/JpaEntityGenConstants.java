@@ -4,6 +4,7 @@ public class JpaEntityGenConstants {
 	
 	public static final String META_REMARKS = "remarks";
 	public static final String TABLE_META_TABLE_NAME = "table_name";
+	public static final String TABLE_META_TABLE_SCHEMA = "table_schema";
 	
 	public static final String COLUMN_META_COLUMN_NAME="column_name";
 	public static final String COLUMN_META_TYPE_NAME = "type_name";

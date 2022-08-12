@@ -4,12 +4,14 @@ import java.util.List;
 
 public class DbTable {
 
+	private String schemaName;
 	private String tableName;
 	private String className;
 	private String remarks;
 	private boolean multiPk = false;
 	private List<DbColumn> columns;
 	private boolean persistable = false;
+	private boolean addschema = false;
 	
 	public boolean isMultiPk() {
 		return multiPk;
@@ -20,6 +22,22 @@ public class DbTable {
 	}
 
 
+
+	public boolean isAddschema() {
+		return addschema;
+	}
+
+	public void setAddschema(boolean addschema) {
+		this.addschema = addschema;
+	}
+
+	public String getSchemaName() {
+		return schemaName;
+	}
+
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
+	}
 
 	public String getTableName() {
 		return tableName;

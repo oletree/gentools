@@ -68,11 +68,12 @@ public class JpaEntityGen implements CommandLineRunner {
 		while (rs.next()) {
 			String tableName = rs.getString(JpaEntityGenConstants.TABLE_META_TABLE_NAME);
 			String remarks = rs.getString(JpaEntityGenConstants.META_REMARKS);
+			String tableSchema = rs.getString(JpaEntityGenConstants.TABLE_META_TABLE_SCHEMA);
 			if (!HandlerUtil.tableSelector(tableName, jpaEntityGenProperties))
 				continue;
-
 			DbTable table = new DbTable();
 			list.add(table);
+			table.setSchemaName(tableSchema);
 			table.setTableName(tableName);
 			table.setRemarks(remarks);
 			table.setClassName(
@@ -83,6 +84,7 @@ public class JpaEntityGen implements CommandLineRunner {
 			if(pk.size() > 1) table.setMultiPk(true);
 			
 			table.setPersistable(HandlerUtil.isPersistable(tableName, jpaEntityGenProperties.getEntity()));
+			table.setAddschema(jpaEntityGenProperties.getEntity().isAddschema());
 			
 		}
 		genEntityClass.write(list);
