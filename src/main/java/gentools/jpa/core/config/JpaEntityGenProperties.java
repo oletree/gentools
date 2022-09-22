@@ -208,6 +208,7 @@ public class JpaEntityGenProperties {
 		private String dbtype;
 		private boolean isString = true; // Enum String 
 		private boolean isEnum = true;
+		private boolean isPrimitive = false;
 		
 		public String getBefore() {
 			return before;
@@ -238,6 +239,12 @@ public class JpaEntityGenProperties {
 		}
 		public void setEnum(boolean isEnum) {
 			this.isEnum = isEnum;
+		}
+		public boolean isPrimitive() {
+			return isPrimitive;
+		}
+		public void setPrimitive(boolean isPrimitive) {
+			this.isPrimitive = isPrimitive;
 		}
 		
 		

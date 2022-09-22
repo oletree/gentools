@@ -47,6 +47,30 @@ public class DefaultClassMap {
 		}
 		return null;
 	}
+	
+	public static boolean isPrimitiveColumnJavaCalss(String clazzName, String dbType, String columnName) {
+		Set<Entry<String, JavaTypeChange>> keyValues = enumMap.entrySet();
+		String lowColumnName = columnName.toLowerCase();
+		String lowDbType = dbType.toLowerCase();
+		for(Entry<String, JavaTypeChange> keyval : keyValues) {
+			String key = keyval.getKey();
+			JavaTypeChange cd = keyval.getValue();
+			if(key.startsWith(ANY_PREFIX)) {
+				String suffix = key.substring(ANY_PREFIX.length()).toLowerCase();
+				if(lowColumnName.endsWith(suffix) ) {
+					if(StringUtils.isEmpty(cd.getDbtype()) ) {
+						return cd.isPrimitive();
+					}else if(lowDbType.equals(cd.getDbtype()) ){
+						return cd.isPrimitive();
+					}
+				}
+			}else if( key.equals(lowColumnName)){ 
+				return cd.isPrimitive();
+				
+			}
+		}
+		return false;
+	}
 	public static String getColumnJavaCalss(String clazzName, String dbType, String columnName) {
 		Set<Entry<String, JavaTypeChange>> keyValues = enumMap.entrySet();
 		String lowColumnName = columnName.toLowerCase();

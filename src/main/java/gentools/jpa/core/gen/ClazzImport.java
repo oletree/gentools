@@ -44,6 +44,7 @@ public class ClazzImport extends AbstractExtendProc {
 		ConvertInfo myConvertInfo = HandlerUtil.getTableConverts(tableName, entityProp);
 		GeneratorInfo myGenerator = HandlerUtil.getTableGenerator(tableName, entityProp);
 		for( DbColumn c : tableInfo.getColumns() ) {
+			if(c.isPrimitive()) continue;
 			if(canAddThisColumn(tableInfo, c)) {
 				if(pkClass) {
 					if( c.isPkColumn() ) {

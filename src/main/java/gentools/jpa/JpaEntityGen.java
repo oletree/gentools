@@ -130,6 +130,10 @@ public class JpaEntityGen implements CommandLineRunner {
 			String javaClassName = DefaultClassMap.getColumnJavaCalss(
 					colJavaType.get(col.getColumnName()), col.getTypeName(), col.getColumnName()
 					);
+			boolean isPrimitive = DefaultClassMap.isPrimitiveColumnJavaCalss(
+					colJavaType.get(col.getColumnName()), col.getTypeName(), col.getColumnName()
+					);
+			col.setPrimitive(isPrimitive);
 			col.setJavaClassName(javaClassName);
 			if( pk.contains(col.getColumnName()) ) {
 				col.setPkColumn(true);

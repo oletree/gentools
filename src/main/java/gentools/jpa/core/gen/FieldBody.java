@@ -21,6 +21,7 @@ public class FieldBody {
 	String fieldName;
 	String fieldType;
 	boolean isEnum = false;
+	boolean isPrimitive = false;
 	boolean isStringEnum = true;
 	boolean autoInc = false;
 	boolean multiKey = false;
@@ -49,6 +50,7 @@ public class FieldBody {
 		autoInc = "yes".equals(column.getIsAutoIncrement().toLowerCase() );
 		JavaTypeChange enType = DefaultClassMap.getEnumJavaClass(column.getColumnName(), column.getTypeName());
 		isEnum = enType != null ? enType.isEnum(): false;
+		isPrimitive = enType != null ? enType.isPrimitive() : false;
 		isStringEnum = enType == null ?false : enType.isString();
 		isLob = HandlerUtil.isLobColumn(column.getTypeName());
 		

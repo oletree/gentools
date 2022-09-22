@@ -10,6 +10,7 @@ public class DbColumn {
 	private String isAutoIncrement;
 	private String javaClassName;
 	private boolean pkColumn = false;
+	private boolean isPrimitive = false;
 	
 	public boolean isPkColumn() {
 		return pkColumn;
@@ -60,6 +61,12 @@ public class DbColumn {
 		this.javaClassName = sqlDataType;
 	}
 	
+	public boolean isPrimitive() {
+		return isPrimitive;
+	}
+	public void setPrimitive(boolean isPrimitive) {
+		this.isPrimitive = isPrimitive;
+	}
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("columnName=").append(columnName).append(",");
