@@ -189,8 +189,13 @@ public class FieldBody {
 	public String toStringMethod() {
 		StringBuilder sb = new StringBuilder();
 		if(column != null && !StringUtils.isEmpty(column.getRemarks()) ) HandlerUtil.addMemberComment(sb, column.getRemarks());
-		sb.append("\t").append("public ").append(fieldType).append(" ")
-		.append(HandlerUtil.buildAccessorName("get", fieldName)).append("() {").append(System.lineSeparator());
+		sb.append("\t").append("public ").append(fieldType).append(" ");
+		if( isPrimitive && fieldType.equals("boolean")) {
+			sb.append(HandlerUtil.buildAccessorName("is", fieldName));
+		}else {
+			sb.append(HandlerUtil.buildAccessorName("get", fieldName));	
+		}
+		sb.append("() {").append(System.lineSeparator());
 		sb.append("\t\t").append("return this.");
 		if(isJavaKeyString) sb.append("_");
 		sb.append(fieldName).append(";").append(System.lineSeparator());
