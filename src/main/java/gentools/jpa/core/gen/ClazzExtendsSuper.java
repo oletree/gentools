@@ -77,7 +77,13 @@ public class ClazzExtendsSuper extends AbstractExtendProc {
 		
 		HandlerUtil.addClassComment(sb, tableInfo.getRemarks());
 		sb.append("@Entity").append(System.lineSeparator());
-		sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\")").append(System.lineSeparator());
+		
+		sb.append("@Table(name=\"").append(tableInfo.getTableName()).append("\"");
+		if(tableInfo.isAddschema()) {
+			sb.append(", schema=\"").append(tableInfo.getSchemaName()).append("\"");
+		}
+		sb.append(")").append(System.lineSeparator());
+		
 		sb.append("public class ").append(className).append(" extends ").append(entityProp.getPrefix()).append(className);
 		
 		sb.append(" implements Serializable");
