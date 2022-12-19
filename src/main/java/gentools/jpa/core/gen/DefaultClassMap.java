@@ -20,8 +20,10 @@ public class DefaultClassMap {
 	static {
 		defaultMap.put("java.sql.Timestamp", "java.util.Date");
 		defaultMap.put("java.sql.Time", "java.util.Date");
+		defaultMap.put("[B", "byte[]");
 		
 		noImportSet.add("java.lang.Long");
+		noImportSet.add("byte[]");
 	}
 	
 	public static JavaTypeChange getEnumJavaClass(String columnName, String dbType) {
@@ -111,6 +113,7 @@ public class DefaultClassMap {
 			if(afterName.indexOf(".") > 0) return true;
 			return false;
 		}
+		if(noImportSet.contains(className)) return false;
 		return true;
 	}
 	

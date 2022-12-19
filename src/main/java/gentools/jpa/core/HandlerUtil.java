@@ -161,6 +161,7 @@ public class HandlerUtil {
 		String lowtypeName = typeName.toLowerCase();
 		if("text".equals(lowtypeName)) return true;
 		if("longtext".equals(lowtypeName)) return true;
+		if("blob".equals(lowtypeName)) return true;
 		return false;
 	}
 
